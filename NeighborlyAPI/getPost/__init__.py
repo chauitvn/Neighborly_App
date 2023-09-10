@@ -1,24 +1,29 @@
 import logging
-
+import os
+import pymongo
+from bson.json_util import dumps
+from bson.objectid import ObjectId
 import azure.functions as func
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
+    logging.info('Python Get Post function processed a request.')
 
-    name = req.params.get('name')
-    if not name:
+    id = req.params.get('id')
+
+    if id:
         try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
+            url = os.environ['CosmosDBConectionString']
+            client = pymongo.MongoClient(url)
+            database = client['neighbourly_app_db']
+            colection = database['posts']
 
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-    else:
-        return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-             status_code=200
-        )
+            query = {"_id": ObjectId(id)}
+            result = colection.find(query)
+            result = dumps(result)
+
+            return func.HttpResponse(result, mimetype="application/json", charset='utf-8')
+        except ValueError:
+            return func.HttpResponse("Database connection error.", status_code=500)
+        else:
+            return func.HttpResponse("Please pass an id parameter in the query string.", status_code=400)

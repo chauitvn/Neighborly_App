@@ -1,24 +1,24 @@
 import logging
-
+import os
+import pymongo
+from bson.json_util import dumps
 import azure.functions as func
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
+    logging.info('Python Get Posts function processed a request.')
 
     name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
 
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-    else:
-        return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-             status_code=200
-        )
+    try:
+        url = os.environ['CosmosDBConectionString']
+        client = pymongo.MongoClient(url)
+        database = client['neighbourly_app_db']
+        colection = database['posts']
+
+        result = colection.find()
+        result = dumps(result)
+
+        return func.HttpResponse(result, mimetype="application/json", charset='utf-8')
+    except ValueError:
+        return func.HttpResponse("Bad request.", status_code=400)
