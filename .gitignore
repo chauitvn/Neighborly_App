@@ -1,1 +1,5 @@
 NeighborlyFrontEnd/venv/**
+
+.python_packages
+__pycache__
+.venv

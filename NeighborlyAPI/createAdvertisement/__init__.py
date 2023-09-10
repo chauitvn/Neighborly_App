@@ -1,3 +1,4 @@
+import os
 import azure.functions as func
 import pymongo
 
@@ -7,7 +8,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     if request:
         try:
-            url = "localhost"  # TODO: Update with appropriate MongoDB connection information
+            url = os.environ['DB_CONNECTION_STRING']
             client = pymongo.MongoClient(url)
             database = client['azure']
             collection = database['advertisements']
