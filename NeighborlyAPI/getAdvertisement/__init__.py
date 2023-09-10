@@ -1,35 +1,24 @@
-import azure.functions as func
-import pymongo
-import json
-import os
-from bson.json_util import dumps
-from bson.objectid import ObjectId
 import logging
 
+import azure.functions as func
+
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info('Python HTTP trigger function processed a request.')
 
-    # example call http://localhost:7071/api/getAdvertisement/?id=5eb6cb8884f10e06dc6a2084
-
-    id = req.params.get('id')
-    print("--------------->", id)
-    
-    if id:
+    name = req.params.get('name')
+    if not name:
         try:
-            url = os.environ['DB_CONNECTION_STRING']
-            client = pymongo.MongoClient(url)
-            database = client['azure']
-            collection = database['advertisements']
-           
-            query = {'_id': ObjectId(id)}
-            result = collection.find_one(query)
-            print("----------result--------")
+            req_body = req.get_json()
+        except ValueError:
+            pass
+        else:
+            name = req_body.get('name')
 
-            result = dumps(result)
-            print(result)
-
-            return func.HttpResponse(result, mimetype="application/json", charset='utf-8')
-        except:
-            return func.HttpResponse("Database connection error.", status_code=500)
-
+    if name:
+        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
     else:
-        return func.HttpResponse("Please pass an id parameter in the query string.", status_code=400)
+        return func.HttpResponse(
+             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
+             status_code=200
+        )
