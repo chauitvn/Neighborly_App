@@ -8,12 +8,10 @@ import azure.functions as func
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python Get Posts function processed a request.')
 
-    name = req.params.get('name')
-
     try:
         url = os.environ['CosmosDBConectionString']
         client = pymongo.MongoClient(url)
-        database = client['neighbourly_app_db']
+        database = client['neighbourky_app_db']
         colection = database['posts']
 
         result = colection.find()

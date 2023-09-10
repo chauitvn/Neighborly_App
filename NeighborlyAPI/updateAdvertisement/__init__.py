@@ -16,7 +16,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         try:
             url = os.environ['CosmosDBConectionString']
             client = pymongo.MongoClient(url)
-            database = client['azure']
+            database = client['neighbourky_app_db']
             collection = database['advertisements']
             
             filter_query = {'_id': ObjectId(id)}
