@@ -1,24 +1,37 @@
+import os
 import logging
-
+import pymongo
 import azure.functions as func
+from bson.objectid import ObjectId
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
+    logging.info('Python Delete Advertisement function processed a request.')
 
-    name = req.params.get('name')
-    if not name:
+    id = req.params.get('id')
+
+    if id:
         try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
+            url = os.environ['CosmosDBConectionString']
+            client = pymongo.MongoClient(url)
+            database = client['neighbourly_app_db']
+            colection = database['advertisements']
 
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
+            query = {"_id": ObjectId(id)}
+            colection.delete_one(query)
+
+            return func.HttpResponse(
+                "Advertisement deleted",
+                status_code=200
+            )
+        except ValueError:
+            print("Could not connect to MongoDB")
+            return func.HttpResponse(
+                "Could not connect to MongoDB",
+                status_code=500
+            )
     else:
         return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-             status_code=200
+            "Please pass an Id in the query string",
+            status_code=400
         )
