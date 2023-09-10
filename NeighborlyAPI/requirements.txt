@@ -1,6 +1,5 @@
 azure-functions==1.9.0
 azure-cosmos==4.2.0
 pymongo==4.0.2
-bson==0.5.10
 Flask==1.1.2
 requests==2.23.0
