@@ -11,7 +11,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         url = os.environ['CosmosDBConectionString']
         client = pymongo.MongoClient(url)
-        database = client['neighbourky_app_db']
+        database = client['neighborky_app_db']
         colection = database['advertisements']
 
         result = colection.find()

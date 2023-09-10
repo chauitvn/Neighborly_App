@@ -13,7 +13,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         try:
             url = os.environ['CosmosDBConectionString']
             client = pymongo.MongoClient(url)
-            database = client['neighbourky_app_db']
+            database = client['neighborky_app_db']
             colection = database['advertisements']
 
             rec_id1 = colection.insert_one(eval(request))
