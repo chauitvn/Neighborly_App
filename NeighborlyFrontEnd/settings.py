@@ -17,4 +17,4 @@ API_VERSION = 'v1'
 
 # ------- For production -------
 # where APP_NAME is your Azure Function App name 
-API_URL="https://myneighborlyapp.azurewebsites.net/api"
+API_URL="https://neighbors-20230918-func-app.azurewebsites.net/api/"
