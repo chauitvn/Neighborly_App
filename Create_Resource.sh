@@ -30,5 +30,3 @@ az cosmosdb mongodb database create --account-name $cosmosDbName --name "neighbo
 az functionapp create --resource-group $resourceGroupName --name $functionAppName --storage-account $storageAccountName \
     --consumption-plan-location $location --runtime python --runtime-version 3.9 --os-type linux
 
-# Create a web app
-az webapp create --resource-group myResourceGroup --plan myAppServicePlan --name <app-name> --deployment-local-git

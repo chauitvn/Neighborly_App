@@ -3,6 +3,7 @@ import os
 import pymongo
 from bson.json_util import dumps
 import azure.functions as func
+from bson.objectid import ObjectId
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
@@ -19,7 +20,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             colection = database['advertisements']
 
             query = {"_id": ObjectId(id)}
-            advertisement = colection.find_one(query)
+            result = colection.find(query)
             print("----------result--------")
 
             result = dumps(result)

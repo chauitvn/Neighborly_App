@@ -25,7 +25,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 status_code=200
             )
         except ValueError:
-            print("Could not connect to MongoDB")
+            logging.error(ValueError)
             return func.HttpResponse(
                 "Could not connect to MongoDB",
                 status_code=500

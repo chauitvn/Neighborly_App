@@ -19,4 +19,5 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         return func.HttpResponse(result, mimetype="application/json", charset='utf-8')
     except ValueError:
+        print(ValueError)
         return func.HttpResponse("Bad request.", status_code=400)
